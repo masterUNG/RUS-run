@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(context, "Welcome " + myNameString, Toast.LENGTH_SHORT).show();
 
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+
+                        intent.putExtra("loginID", myIDString);
+
                         startActivity(intent);
 
                     } else {
@@ -163,10 +166,10 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             //No Space
-//            SynUser synUser = new SynUser(urlJSON, userString, passwordString, this);
-//            synUser.execute();
+            SynUser synUser = new SynUser(urlJSON, userString, passwordString, this);
+            synUser.execute();
 
-            showAOH();
+            //showAOH();
 
 
 
