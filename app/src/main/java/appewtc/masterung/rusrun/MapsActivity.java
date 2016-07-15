@@ -16,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -23,6 +24,9 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -161,16 +165,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             try {
 
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlJSON).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
             } catch (Exception e) {
                 return null;
             }
 
-            return null;
         }   // doInBack
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            Log.d("RusV4", "JSON ==>>> " + s);
+
+            try {
+
+                JSONArray jsonArray = new JSONArray(s);
+                for (int i=0;i<jsonArray.length();i++) {
+
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    double douLat = Double.parseDouble(jsonObject.getString("Lat"));
+                    double douLng = Double.parseDouble(jsonObject.getString("Lng"));
+                    String strName = jsonObject.getString("Name");
+
+                    LatLng latLng = new LatLng(douLat, douLng);
+                    googleMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(strName));
+
+                }   // for
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
         }   // onPost
 
     }   // CreateMarker Class
@@ -186,7 +222,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         editLatLngOnServer();
 
         //Create Marker
-
+        mMap.clear();
+        CreateMarker createMarker = new CreateMarker(this, mMap);
+        createMarker.execute();
 
 
         //Delay
