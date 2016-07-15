@@ -15,6 +15,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.RequestBody;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -141,6 +144,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.d("RusV3", "latUser ==> " + latUserADouble);
         Log.d("RusV3", "lngUser ==> " + lngUserADouble);
 
+        //Edit Lat,Lng on Server
+        editLatLngOnServer();
+
 
         //Delay
         Handler handler = new Handler();
@@ -153,5 +159,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }   // myLoop
+
+    private void editLatLngOnServer() {
+
+        String urlPHP = "http://swiftcodingthai.com/rus/edit_location_master.php";
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("isAdd", "true")
+                .add("id", "test")
+                .add("Lat", Double.toString(latUserADouble))
+                .add("Lng", Double.toString(lngUserADouble))
+                .build();
+
+
+
+    }   // editLatLng
 
 }   // Main Class

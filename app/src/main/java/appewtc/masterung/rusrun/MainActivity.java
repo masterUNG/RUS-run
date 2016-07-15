@@ -163,8 +163,12 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             //No Space
-            SynUser synUser = new SynUser(urlJSON, userString, passwordString, this);
-            synUser.execute();
+//            SynUser synUser = new SynUser(urlJSON, userString, passwordString, this);
+//            synUser.execute();
+
+            showAOH();
+
+
 
         }   //if
 
@@ -172,6 +176,37 @@ public class MainActivity extends AppCompatActivity {
 
 
     }   // clickSign
+
+    private void showAOH() {
+
+        String[] userStrings = new String[]{"master1", "master2"};
+        String[] passwordStrings = new String[]{"12345", "67890"};
+        boolean bolStatus = true;
+        String truePassword = "";
+
+        //Check User
+        for (int i=0;i<userStrings.length;i++) {
+
+            if (userString.equals(userStrings[i])) {
+                bolStatus = false;
+                truePassword = passwordStrings[i];
+            }
+
+        }   //for
+
+        if (bolStatus) {
+            Toast.makeText(this, "User False", Toast.LENGTH_SHORT).show();
+        } else if (passwordString.equals(truePassword)) {
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            startActivity(intent);
+
+        } else {
+            Toast.makeText(this, "Password False", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }   // showAOH
+
 
 
     public void clickSignUpMain(View view) {
